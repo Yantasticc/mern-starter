@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Create = () => {
 
@@ -6,13 +7,52 @@ const Create = () => {
     const [email, setEmail] = useState("")
     const [age, setAge] = useState(0)
 
+    const [error, setError] = useState("")
+
+    const navigate = useNavigate();
+
     console.log(name,email,age)
+
+    const handleSubmit = async (e)=> {
+
+        e.preventDefault();
+
+        const addUser = {name, email, age}
+
+        const response = await fetch('http://localhost:5000', {
+
+            method:"POST",
+            body: JSON.stringify(addUser),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const result = await response.json();
+
+        if(!response.ok){
+            console.log(result.error);
+            setError(result.error);
+        }
+
+        if(response.ok){
+            console.log(result)
+            setError("")
+            setName("")
+            setEmail("")
+            setAge(0)
+            navigate('/all')
+        }
+
+    } 
 
   return (
     <div className='container my-2'>
+
+      {error && <div class="alert alert-danger">{error}</div>} 
       <h2>Enter the data</h2>
 
-        <form>
+        <form onSubmit={handleSubmit}>
             <div className="mb-3">
                 <label className="form-label">Enter your name</label>
                 <input 
