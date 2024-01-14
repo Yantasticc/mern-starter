@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom'
 
 const Read = () => {
     const [data, setData] = useState([]);
@@ -7,6 +8,7 @@ const Read = () => {
     async function getData() {
         try {
             const response = await fetch("http://localhost:5000");
+            
             const result = await response.json();
 
             if (!response.ok) {
@@ -64,7 +66,7 @@ const Read = () => {
                                 <h6 className="card-subtitle mb-2 text-body-secondary">{ele.email}</h6>
                                 <h6 className="card-subtitle mb-2 text-body-secondary">{ele.age}</h6>
                                 <a href="/" className="card-link" onClick={() => handleDelete(ele._id)}>Delete</a>
-                                <a href="/" className="card-link">Edit</a>
+                                <Link to={`/${ele._id}`} className="card-link">Edit</Link>
                             </div>
                         </div>
                     </div>
